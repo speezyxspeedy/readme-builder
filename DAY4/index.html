@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="ProfileCraft — A modern, powerful GitHub Profile README Builder. Create beautiful, professional GitHub profile READMEs in minutes with live Markdown preview, customizable templates, and instant export.">
+  <meta name="keywords"
+    content="GitHub profile readme generator, markdown builder, developer portfolio, github bio maker, profilecraft">
+  <meta name="author" content="ProfileCraft">
+  <title>ProfileCraft — GitHub Profile README Builder</title>
+
+  <!-- Modern Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- App Container -->
+  <div class="app-layout">
+
+    <!-- Top Navigation Bar -->
+    <header class="app-navbar" role="banner">
+      <div class="navbar-left">
+        <div class="brand-logo" aria-label="ProfileCraft Home">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <div class="brand-text">
+            <span class="brand-name">Profile<span class="brand-accent">Craft</span></span>
+            <span class="brand-badge">PRO README BUILDER</span>
+          </div>
+        </div>
+
+        <!-- Template Selector Quick Switch -->
+        <div class="template-selector-nav">
+          <label for="nav-template-select" class="nav-label">
+            <svg class="nav-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            Template:
+          </label>
+          <select id="nav-template-select" class="template-select" aria-label="Select README Template">
+            <option value="professional">Professional Portfolio</option>
+            <option value="minimal">Minimal Developer</option>
+            <option value="opensource">Open Source Contributor</option>
+            <option value="student">Student Developer</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Center Auto-Save indicator -->
+      <div class="navbar-center">
+        <div class="save-status" id="save-status" aria-live="polite">
+          <span class="status-dot"></span>
+          <span class="status-text">Draft saved locally</span>
+        </div>
+      </div>
+
+      <!-- Right Nav Actions -->
+      <div class="navbar-right">
+        <!-- Quick Sample & Clear -->
+        <button type="button" class="btn btn-ghost" id="btn-load-sample" title="Load sample developer profile">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Load Sample</span>
+        </button>
+
+        <button type="button" class="btn btn-ghost text-danger" id="btn-reset-draft"
+          title="Clear current profile and start fresh">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Clear</span>
+        </button>
+
+        <div class="nav-divider"></div>
+
+        <!-- Backup / Import JSON -->
+        <button type="button" class="btn btn-outline" id="btn-json-modal" title="Import or export JSON backup">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>JSON Sync</span>
+        </button>
+
+        <!-- GitHub Setup Instructions modal trigger -->
+        <button type="button" class="btn btn-outline" id="btn-guide-modal" title="How to set up GitHub Profile README">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Setup Guide</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button type="button" class="btn-theme-toggle" id="btn-theme-toggle" aria-label="Toggle dark/light theme"
+          title="Toggle theme">
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile View Switcher (Editor vs Preview) -->
+    <div class="mobile-tabs-bar" role="tablist" aria-label="Editor and Preview Views">
+      <button type="button" role="tab" id="mobile-tab-editor" class="mobile-tab active" aria-selected="true"
+        aria-controls="editor-panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        <span>Editor</span>
+      </button>
+      <button type="button" role="tab" id="mobile-tab-preview" class="mobile-tab" aria-selected="false"
+        aria-controls="preview-panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span>Live Preview</span>
+      </button>
+    </div>
+
+    <!-- Main Workspace (Split Grid) -->
+    <main class="workspace-container">
+
+      <!-- ======================================================== -->
+      <!-- LEFT PANEL: PROFILE EDITOR                              -->
+      <!-- ======================================================== -->
+      <section class="panel editor-panel active-mobile" id="editor-panel" aria-label="Profile Configuration Editor">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h1 class="panel-title">Profile Configuration</h1>
+            <p class="panel-subtitle">Fill in your developer details. The live preview updates in real-time.</p>
+          </div>
+
+          <button type="button" class="btn btn-xs btn-outline" id="btn-collapse-all"
+            title="Collapse or expand all sections">
+            Toggle Sections
+          </button>
+        </div>
+
+        <div class="editor-content-scroll">
+
+          <!-- 1. GITHUB AUTO-FETCH CARD -->
+          <div class="card github-import-card">
+            <div class="card-header">
+              <div class="card-title-icon github-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z">
+                  </path>
+                </svg>
+              </div>
+              <div class="card-title-text">
+                <h3>Fetch Public GitHub Profile</h3>
+                <p>Optionally prefill your name, bio, location, and repos from GitHub's Public REST API.</p>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="input-with-button">
+                <div class="input-prefix-wrapper">
+                  <span class="input-prefix">github.com/</span>
+                  <input type="text" id="fetch-github-user" class="form-control" placeholder="octocat"
+                    autocomplete="off" spellcheck="false">
+                </div>
+                <button type="button" class="btn btn-primary" id="btn-fetch-github">
+                  <span class="btn-spinner" id="fetch-spinner" style="display: none;"></span>
+                  <span id="fetch-btn-label">Fetch Profile</span>
+                </button>
+              </div>
+
+              <!-- Status Alert for API response -->
+              <div id="github-api-alert" class="api-alert" style="display: none;" role="status">
+                <span class="alert-icon"></span>
+                <span class="alert-message"></span>
+                <button type="button" class="alert-close" aria-label="Dismiss alert">&times;</button>
+              </div>
+
+              <small class="form-hint">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Rate limits apply to unauthenticated public requests (60 req/hr). No credentials are ever requested.
+                Manual editing is always available.
+              </small>
+            </div>
+          </div>
+
+          <!-- ACCORDION SECTIONS -->
+
+          <!-- SECTION 1: BASIC INFORMATION -->
+          <details class="editor-section" open id="sec-basic">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                1. Personal Information
+              </span>
+              <span class="summary-badge">Essential</span>
+            </summary>
+
+            <div class="section-body">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="field-fullname" class="form-label">Full Name <span class="required">*</span></label>
+                  <input type="text" id="field-fullname" class="form-control" placeholder="e.g. Alex Morgan" required>
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-github-username" class="form-label">GitHub Username <span
+                      class="required">*</span></label>
+                  <input type="text" id="field-github-username" class="form-control" placeholder="e.g. alexmorgan"
+                    required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="field-headline" class="form-label">Professional Headline / Role</label>
+                <input type="text" id="field-headline" class="form-control"
+                  placeholder="e.g. Senior Full Stack Engineer & Open Source Enthusiast">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="field-location" class="form-label">Location</label>
+                  <input type="text" id="field-location" class="form-control"
+                    placeholder="e.g. San Francisco, CA (or Remote)">
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-company" class="form-label">Current Company / Organization</label>
+                  <input type="text" id="field-company" class="form-control" placeholder="e.g. Acme Corp / Freelance">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="field-bio" class="form-label">About Me / Bio</label>
+                <textarea id="field-bio" class="form-control" rows="3"
+                  placeholder="Passionate developer building high-performance web experiences and distributed systems. When not coding, I write technical articles and contribute to open source."></textarea>
+                <small class="form-hint">Brief intro summarizing who you are and what excites you.</small>
+              </div>
+            </div>
+          </details>
+
+          <!-- SECTION 2: LEARNING & COLLABORATION -->
+          <details class="editor-section" open id="sec-learning">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                2. Status, Goals & Collaboration
+              </span>
+            </summary>
+
+            <div class="section-body">
+              <div class="form-group">
+                <label for="field-working-on" class="form-label">🔭 Currently Working On</label>
+                <input type="text" id="field-working-on" class="form-control"
+                  placeholder="e.g. An AI-powered knowledge engine & design system">
+              </div>
+
+              <div class="form-group">
+                <label for="field-learning" class="form-label">🌱 Currently Learning</label>
+                <input type="text" id="field-learning" class="form-control"
+                  placeholder="e.g. Rust, WebGPU, and Distributed Raft Consensus">
+              </div>
+
+              <div class="form-group">
+                <label for="field-collaborating" class="form-label">👯 Looking to Collaborate On</label>
+                <input type="text" id="field-collaborating" class="form-control"
+                  placeholder="e.g. Open source developer tooling, CLI apps, and TypeScript libraries">
+              </div>
+
+              <div class="form-group">
+                <label for="field-ask-me" class="form-label">💬 Ask Me About</label>
+                <input type="text" id="field-ask-me" class="form-control"
+                  placeholder="e.g. React, Node.js, Web Architecture, System Design">
+              </div>
+
+              <div class="form-group">
+                <label for="field-fun-fact" class="form-label">⚡ Fun Fact / Hobbies</label>
+                <input type="text" id="field-fun-fact" class="form-control"
+                  placeholder="e.g. I brew specialty coffee and run ultramarathons.">
+              </div>
+            </div>
+          </details>
+
+          <!-- SECTION 3: SKILLS & TECH STACK -->
+          <details class="editor-section" open id="sec-skills">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                3. Skills & Technologies
+              </span>
+              <span class="summary-badge count-badge" id="skills-total-badge">0 items</span>
+            </summary>
+
+            <div class="section-body">
+              <!-- Skill Style Toggle: Badges vs List -->
+              <div class="settings-pill-row">
+                <span class="pill-label">Skill Display Format:</span>
+                <label class="radio-label">
+                  <input type="radio" name="skills_format" value="badges" checked>
+                  <span>Shields.io Badges</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="skills_format" value="list">
+                  <span>Markdown List / Text</span>
+                </label>
+              </div>
+
+              <!-- Quick Add Presets / Categories -->
+              <div class="skill-category-block" data-category="languages">
+                <div class="cat-header">
+                  <label class="cat-title">💻 Programming Languages</label>
+                  <div class="quick-preset-chips" id="preset-languages">
+                    <span class="chip-preset" data-cat="languages" data-name="JavaScript" data-color="F7DF1E"
+                      data-logo="javascript">+ JavaScript</span>
+                    <span class="chip-preset" data-cat="languages" data-name="TypeScript" data-color="3178C6"
+                      data-logo="typescript">+ TypeScript</span>
+                    <span class="chip-preset" data-cat="languages" data-name="Python" data-color="3776AB"
+                      data-logo="python">+ Python</span>
+                    <span class="chip-preset" data-cat="languages" data-name="Rust" data-color="000000"
+                      data-logo="rust">+ Rust</span>
+                    <span class="chip-preset" data-cat="languages" data-name="Go" data-color="00ADD8" data-logo="go">+
+                      Go</span>
+                    <span class="chip-preset" data-cat="languages" data-name="C++" data-color="00599C"
+                      data-logo="cplusplus">+ C++</span>
+                    <span class="chip-preset" data-cat="languages" data-name="Java" data-color="ED8B00"
+                      data-logo="openjdk">+ Java</span>
+                  </div>
+                </div>
+                <div class="cat-input-row">
+                  <input type="text" class="form-control cat-input" id="input-cat-languages"
+                    placeholder="Type a language and press Enter...">
+                  <button type="button" class="btn btn-sm btn-outline btn-add-cat-skill"
+                    data-target="languages">Add</button>
+                </div>
+                <div class="skill-tags-container" id="tags-languages"></div>
+              </div>
+
+              <div class="skill-category-block" data-category="frameworks">
+                <div class="cat-header">
+                  <label class="cat-title">⚛️ Frameworks & Libraries</label>
+                  <div class="quick-preset-chips" id="preset-frameworks">
+                    <span class="chip-preset" data-cat="frameworks" data-name="React" data-color="20232A"
+                      data-logo="react">+ React</span>
+                    <span class="chip-preset" data-cat="frameworks" data-name="Next.js" data-color="000000"
+                      data-logo="nextdotjs">+ Next.js</span>
+                    <span class="chip-preset" data-cat="frameworks" data-name="Vue.js" data-color="4FC08D"
+                      data-logo="vuedotjs">+ Vue</span>
+                    <span class="chip-preset" data-cat="frameworks" data-name="Node.js" data-color="339933"
+                      data-logo="nodedotjs">+ Node.js</span>
+                    <span class="chip-preset" data-cat="frameworks" data-name="Express" data-color="000000"
+                      data-logo="express">+ Express</span>
+                    <span class="chip-preset" data-cat="frameworks" data-name="TailwindCSS" data-color="06B6D4"
+                      data-logo="tailwindcss">+ Tailwind</span>
+                    <span class="chip-preset" data-cat="frameworks" data-name="GraphQL" data-color="E10098"
+                      data-logo="graphql">+ GraphQL</span>
+                  </div>
+                </div>
+                <div class="cat-input-row">
+                  <input type="text" class="form-control cat-input" id="input-cat-frameworks"
+                    placeholder="Type a framework and press Enter...">
+                  <button type="button" class="btn btn-sm btn-outline btn-add-cat-skill"
+                    data-target="frameworks">Add</button>
+                </div>
+                <div class="skill-tags-container" id="tags-frameworks"></div>
+              </div>
+
+              <div class="skill-category-block" data-category="databases">
+                <div class="cat-header">
+                  <label class="cat-title">🗄️ Databases, Cloud & DevOps</label>
+                  <div class="quick-preset-chips" id="preset-databases">
+                    <span class="chip-preset" data-cat="databases" data-name="PostgreSQL" data-color="4169E1"
+                      data-logo="postgresql">+ PostgreSQL</span>
+                    <span class="chip-preset" data-cat="databases" data-name="MongoDB" data-color="47A248"
+                      data-logo="mongodb">+ MongoDB</span>
+                    <span class="chip-preset" data-cat="databases" data-name="Redis" data-color="DC382D"
+                      data-logo="redis">+ Redis</span>
+                    <span class="chip-preset" data-cat="databases" data-name="Docker" data-color="2496ED"
+                      data-logo="docker">+ Docker</span>
+                    <span class="chip-preset" data-cat="databases" data-name="AWS" data-color="232F3E"
+                      data-logo="amazonaws">+ AWS</span>
+                    <span class="chip-preset" data-cat="databases" data-name="Kubernetes" data-color="326CE5"
+                      data-logo="kubernetes">+ Kubernetes</span>
+                  </div>
+                </div>
+                <div class="cat-input-row">
+                  <input type="text" class="form-control cat-input" id="input-cat-databases"
+                    placeholder="Type a database/tool and press Enter...">
+                  <button type="button" class="btn btn-sm btn-outline btn-add-cat-skill"
+                    data-target="databases">Add</button>
+                </div>
+                <div class="skill-tags-container" id="tags-databases"></div>
+              </div>
+
+              <div class="skill-category-block" data-category="tools">
+                <div class="cat-header">
+                  <label class="cat-title">🛠️ Developer Tools & Systems</label>
+                  <div class="quick-preset-chips" id="preset-tools">
+                    <span class="chip-preset" data-cat="tools" data-name="Git" data-color="F05032" data-logo="git">+
+                      Git</span>
+                    <span class="chip-preset" data-cat="tools" data-name="Linux" data-color="FCC624" data-logo="linux">+
+                      Linux</span>
+                    <span class="chip-preset" data-cat="tools" data-name="GitHub Actions" data-color="2088FF"
+                      data-logo="githubactions">+ Actions</span>
+                    <span class="chip-preset" data-cat="tools" data-name="Figma" data-color="F24E1E" data-logo="figma">+
+                      Figma</span>
+                    <span class="chip-preset" data-cat="tools" data-name="Postman" data-color="FF6C37"
+                      data-logo="postman">+ Postman</span>
+                  </div>
+                </div>
+                <div class="cat-input-row">
+                  <input type="text" class="form-control cat-input" id="input-cat-tools"
+                    placeholder="Type a tool and press Enter...">
+                  <button type="button" class="btn btn-sm btn-outline btn-add-cat-skill"
+                    data-target="tools">Add</button>
+                </div>
+                <div class="skill-tags-container" id="tags-tools"></div>
+              </div>
+
+            </div>
+          </details>
+
+          <!-- SECTION 4: FEATURED PROJECTS -->
+          <details class="editor-section" open id="sec-projects">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                4. Featured Projects
+              </span>
+              <span class="summary-badge count-badge" id="projects-total-badge">0 projects</span>
+            </summary>
+
+            <div class="section-body">
+              <div class="section-intro-row">
+                <p class="section-desc">Showcase your standout repositories or products. You can reorder or remove
+                  projects.</p>
+                <button type="button" class="btn btn-sm btn-primary" id="btn-add-project">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  Add Project
+                </button>
+              </div>
+
+              <!-- Projects Container -->
+              <div class="projects-list" id="projects-list-container">
+                <!-- Dynamically rendered project cards -->
+              </div>
+            </div>
+          </details>
+
+          <!-- SECTION 5: ACHIEVEMENTS & EDUCATION -->
+          <details class="editor-section" id="sec-achievements">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                5. Achievements & Education
+              </span>
+            </summary>
+
+            <div class="section-body">
+              <div class="form-group">
+                <label for="field-education" class="form-label">🎓 Education / Degree</label>
+                <input type="text" id="field-education" class="form-control"
+                  placeholder="e.g. B.S. in Computer Science — Stanford University (2020-2024)">
+              </div>
+
+              <div class="form-group">
+                <label for="field-achievements" class="form-label">🏆 Certifications & Notable Milestones</label>
+                <textarea id="field-achievements" class="form-control" rows="3"
+                  placeholder="- AWS Certified Solutions Architect&#10;- Winner, Global Hackathon 2023 (1st place out of 450 teams)&#10;- Authored technical paper on Distributed Stream Processing"></textarea>
+                <small class="form-hint">Enter one achievement per line (with or without a dash).</small>
+              </div>
+            </div>
+          </details>
+
+          <!-- SECTION 6: SOCIALS & CONTACT -->
+          <details class="editor-section" open id="sec-socials">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+                6. Social Profiles & Contact
+              </span>
+            </summary>
+
+            <div class="section-body">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="field-social-email" class="form-label">Email (Public)</label>
+                  <input type="email" id="field-social-email" class="form-control" placeholder="alex@example.com">
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-social-portfolio" class="form-label">Personal Website / Portfolio</label>
+                  <input type="url" id="field-social-portfolio" class="form-control"
+                    placeholder="https://alexmorgan.dev">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="field-social-linkedin" class="form-label">LinkedIn Username / URL</label>
+                  <input type="text" id="field-social-linkedin" class="form-control" placeholder="e.g. alex-morgan-dev">
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-social-twitter" class="form-label">Twitter / X Handle</label>
+                  <input type="text" id="field-social-twitter" class="form-control" placeholder="e.g. alexmorgan_dev">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="field-social-devto" class="form-label">Dev.to / Medium</label>
+                  <input type="text" id="field-social-devto" class="form-control" placeholder="e.g. alexmorgan">
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-social-youtube" class="form-label">YouTube / Twitch</label>
+                  <input type="text" id="field-social-youtube" class="form-control" placeholder="e.g. @AlexMorganTech">
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- SECTION 7: GITHUB STATS & WIDGETS -->
+          <details class="editor-section" id="sec-widgets">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                7. GitHub Activity & Stats Cards
+              </span>
+            </summary>
+
+            <div class="section-body">
+              <p class="section-desc">Include dynamic SVG stats cards powered by open source GitHub cards
+                (anuraghazra/github-readme-stats).</p>
+
+              <div class="widget-checkbox-list">
+                <label class="checkbox-control">
+                  <input type="checkbox" id="widget-stats" checked>
+                  <div class="checkbox-label">
+                    <span class="checkbox-title">GitHub General Stats Card</span>
+                    <span class="checkbox-desc">Shows stars earned, total commits, PRs, and issues.</span>
+                  </div>
+                </label>
+
+                <label class="checkbox-control">
+                  <input type="checkbox" id="widget-langs" checked>
+                  <div class="checkbox-label">
+                    <span class="checkbox-title">Top Languages Card</span>
+                    <span class="checkbox-desc">Visual breakdown of your most used languages across public repos.</span>
+                  </div>
+                </label>
+
+                <label class="checkbox-control">
+                  <input type="checkbox" id="widget-streak">
+                  <div class="checkbox-label">
+                    <span class="checkbox-title">Contribution Streak Stats</span>
+                    <span class="checkbox-desc">Highlights your current and longest commit streaks.</span>
+                  </div>
+                </label>
+
+                <label class="checkbox-control">
+                  <input type="checkbox" id="widget-trophy">
+                  <div class="checkbox-label">
+                    <span class="checkbox-title">GitHub Trophies</span>
+                    <span class="checkbox-desc">Displays earned profile badges and multi-category ranks.</span>
+                  </div>
+                </label>
+              </div>
+
+              <div class="form-row mt-3">
+                <div class="form-group col-6">
+                  <label for="widget-theme-select" class="form-label">Stats Card Theme</label>
+                  <select id="widget-theme-select" class="form-control">
+                    <option value="tokyonight" selected>Tokyo Night</option>
+                    <option value="radical">Radical</option>
+                    <option value="github_dark">GitHub Dark</option>
+                    <option value="dracula">Dracula</option>
+                    <option value="nord">Nord</option>
+                    <option value="transparent">Transparent Minimal</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- SECTION 8: CLOSING MESSAGE / FOOTER -->
+          <details class="editor-section" id="sec-footer">
+            <summary class="section-summary">
+              <span class="summary-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                8. Closing Message & Footer
+              </span>
+            </summary>
+
+            <div class="section-body">
+              <div class="form-group">
+                <label for="field-closing" class="form-label">Closing Quote or Sign-off</label>
+                <input type="text" id="field-closing" class="form-control"
+                  placeholder="e.g. ⭐ Thanks for visiting! Feel free to star my repositories if you find them helpful.">
+              </div>
+
+              <label class="checkbox-control">
+                <input type="checkbox" id="field-profilecraft-badge" checked>
+                <div class="checkbox-label">
+                  <span class="checkbox-title">Include "Crafted with ProfileCraft" Footer Badge</span>
+                  <span class="checkbox-desc">Help other developers discover this free tool.</span>
+                </div>
+              </label>
+            </div>
+          </details>
+
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- RIGHT PANEL: LIVE MARKDOWN & RENDERED PREVIEW             -->
+      <!-- ======================================================== -->
+      <section class="panel preview-panel" id="preview-panel" aria-label="Live Markdown Preview">
+
+        <!-- Preview Control Header -->
+        <div class="panel-header preview-header">
+          <div class="preview-mode-switch" role="tablist" aria-label="Preview display mode">
+            <button type="button" class="mode-tab active" id="tab-mode-rendered" role="tab" aria-selected="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <span>Rendered Preview</span>
+            </button>
+            <button type="button" class="mode-tab" id="tab-mode-raw" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+              <span>Raw Markdown</span>
+            </button>
+          </div>
+
+          <!-- Stats Pill -->
+          <div class="preview-stats" id="preview-stats">
+            <span id="stat-chars">0 chars</span>
+            <span class="stat-dot">•</span>
+            <span id="stat-words">0 words</span>
+            <span class="stat-dot">•</span>
+            <span id="stat-lines">0 lines</span>
+          </div>
+
+          <!-- Export Actions -->
+          <div class="preview-actions">
+            <button type="button" class="btn btn-sm btn-outline" id="btn-copy-markdown"
+              title="Copy Markdown to Clipboard">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="btn-copy-label">Copy Markdown</span>
+            </button>
+
+            <button type="button" class="btn btn-sm btn-primary" id="btn-download-md" title="Download as README.md">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Download README.md</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Preview Viewports -->
+        <div class="preview-viewport-scroll">
+
+          <!-- View 1: RENDERED PREVIEW (Safe GitHub Style) -->
+          <div class="markdown-body github-style-rendered" id="rendered-preview-container">
+            <!-- Dynamically populated sanitized HTML preview -->
+          </div>
+
+          <!-- View 2: RAW MARKDOWN CODE (Hidden by default) -->
+          <div class="raw-markdown-container" id="raw-preview-container" style="display: none;">
+            <div class="raw-actions-bar">
+              <span class="raw-filename">README.md</span>
+              <button type="button" class="btn btn-xs btn-ghost" id="btn-copy-raw-inline">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy Code
+              </button>
+            </div>
+            <pre class="raw-code-pre"><code id="raw-markdown-code" class="language-markdown"></code></pre>
+          </div>
+
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Footer Status / Privacy Notice -->
+    <footer class="app-footer">
+      <div class="footer-privacy">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>Privacy First: ProfileCraft runs 100% in your browser. All drafts remain private in your
+          LocalStorage.</span>
+      </div>
+      <div class="footer-links">
+        <button type="button" class="footer-link-btn" id="btn-privacy-modal">Privacy Details</button>
+        <span class="footer-sep">•</span>
+        <button type="button" class="footer-link-btn" id="btn-shortcuts-modal">Keyboard Shortcuts</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: GITHUB README SETUP INSTRUCTIONS                  -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-guide" role="dialog" aria-modal="true" aria-labelledby="modal-guide-title"
+    style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg viewBox="0 0 24 24" class="modal-title-icon" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z">
+            </path>
+          </svg>
+          <h2 id="modal-guide-title">How to Activate Your GitHub Profile README</h2>
+        </div>
+        <button type="button" class="modal-close-btn" data-close-modal="modal-guide"
+          aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="guide-intro">
+          GitHub has a special feature where a repository named exactly like your username with a <code>README.md</code>
+          file will appear directly at the top of your public profile page!
+        </p>
+
+        <ol class="guide-steps">
+          <li>
+            <strong>Create a special repository:</strong>
+            <p>Go to <a href="https://github.com/new" target="_blank" rel="noopener noreferrer">github.com/new</a> and
+              set the <strong>Repository name</strong> to your exact GitHub username (e.g.
+              <code><span class="user-handle-placeholder">alexmorgan</span></code>).</p>
+          </li>
+          <li>
+            <strong>Set repository to Public:</strong>
+            <p>Ensure the repository is set to <strong>Public</strong> (private repositories won't display on your
+              profile).</p>
+          </li>
+          <li>
+            <strong>Add README:</strong>
+            <p>Check the box <em>"Add a README file"</em> (or leave it unchecked if you plan to push from your
+              terminal).</p>
+          </li>
+          <li>
+            <strong>Paste your generated Markdown:</strong>
+            <p>Click the <strong>Download README.md</strong> button below (or copy Markdown) and commit the file to your
+              repository's main branch.</p>
+          </li>
+        </ol>
+
+        <div class="terminal-box">
+          <div class="terminal-bar">
+            <span>Terminal Command Option</span>
+            <button type="button" class="btn btn-xs btn-ghost" id="btn-copy-git-cmd">Copy commands</button>
+          </div>
+          <pre><code id="git-commands-code"># Initialize and push to your special repository:
+git init
+git add README.md
+git commit -m "feat: initial profile readme"
+git branch -M main
+git remote add origin https://github.com/<username>/<username>.git
+git push -u origin main</code></pre>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-close-modal="modal-guide">Close</button>
+        <button type="button" class="btn btn-primary" id="btn-guide-copy-all">
+          Copy Setup Guide
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: JSON IMPORT & EXPORT                              -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-json" role="dialog" aria-modal="true" aria-labelledby="modal-json-title"
+    style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg viewBox="0 0 24 24" class="modal-title-icon" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <h2 id="modal-json-title">JSON Backup & Migration</h2>
+        </div>
+        <button type="button" class="modal-close-btn" data-close-modal="modal-json"
+          aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc">
+          Export your complete profile configuration as a JSON file to transfer between devices, or restore a previously
+          saved ProfileCraft backup.
+        </p>
+
+        <!-- Export Block -->
+        <div class="sync-action-box">
+          <div class="sync-info">
+            <h4>Export Profile Data</h4>
+            <p>Download a <code>profilecraft-backup.json</code> file with all your entered details, skills, and
+              projects.</p>
+          </div>
+          <button type="button" class="btn btn-outline" id="btn-download-json">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download JSON
+          </button>
+        </div>
+
+        <div class="sync-divider">
+          <span>OR IMPORT FROM FILE</span>
+        </div>
+
+        <!-- Import Block -->
+        <div class="sync-action-box">
+          <div class="sync-info">
+            <h4>Import Profile JSON</h4>
+            <p>Select a <code>.json</code> file previously saved from ProfileCraft.</p>
+          </div>
+          <label class="btn btn-primary file-input-label">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Choose File...
+            <input type="file" id="json-file-input" accept=".json,application/json" style="display: none;">
+          </label>
+        </div>
+
+        <div id="json-import-status" class="api-alert mt-3" style="display: none;"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-close-modal="modal-json">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CONFIRM RESET                                     -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-reset" role="dialog" aria-modal="true" aria-labelledby="modal-reset-title"
+    style="display: none;">
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 id="modal-reset-title" class="text-danger">Reset Profile Draft?</h2>
+        <button type="button" class="modal-close-btn" data-close-modal="modal-reset"
+          aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p>This will clear all currently entered information, projects, and skills from your browser. This action cannot
+          be undone unless you have a JSON backup.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-close-modal="modal-reset">Cancel</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-reset">Yes, Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: PRIVACY DETAILS                                   -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="modal-privacy-title"
+    style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modal-privacy-title">Data Privacy & Security Guarantee</h2>
+        <button type="button" class="modal-close-btn" data-close-modal="modal-privacy"
+          aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="privacy-bullet">
+          <h4>🔒 100% Client-Side Processing</h4>
+          <p>ProfileCraft has no server backend, database, or analytics trackers. Every keystroke is saved strictly to
+            your local web browser's <code>localStorage</code>.</p>
+        </div>
+        <div class="privacy-bullet">
+          <h4>🌐 Public GitHub API Requests</h4>
+          <p>When you click "Fetch Profile", your browser connects directly to GitHub's official public API
+            (<code>https://api.github.com/users/{username}</code>). We never ask for passwords, Personal Access Tokens,
+            or private scopes.</p>
+        </div>
+        <div class="privacy-bullet">
+          <h4>💾 Complete Ownership</h4>
+          <p>You can export and delete your data at any time. Nothing is ever retained or monetized.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-close-modal="modal-privacy">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: SHORTCUTS                                         -->
+  <!-- ======================================================== -->
+  <div class="modal-backdrop" id="modal-shortcuts" role="dialog" aria-modal="true"
+    aria-labelledby="modal-shortcuts-title" style="display: none;">
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h2 id="modal-shortcuts-title">Keyboard Shortcuts</h2>
+        <button type="button" class="modal-close-btn" data-close-modal="modal-shortcuts"
+          aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span>Copy Markdown</span>
+            <kbd>Ctrl / Cmd + C</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span>Download README.md</span>
+            <kbd>Ctrl / Cmd + S</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span>Toggle Dark/Light Theme</span>
+            <kbd>Alt + T</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span>Close Modal Dialogs</span>
+            <kbd>Esc</kbd>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-close-modal="modal-shortcuts">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Application Logic -->
+  <script src="script.js"></script>
+</body>
+
+</html>
